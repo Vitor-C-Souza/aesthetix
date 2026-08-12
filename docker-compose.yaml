@@ -1,0 +1,65 @@
+name: aesthetix-stack
+
+services:
+  traefik:
+    image: traefik:v3.1
+    container_name: aesthetix-traefik
+    restart: unless-stopped
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - aesthetix-net
+
+  mysql:
+    image: mysql:8.0
+    container_name: aesthetix-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: aesthetix_db
+      MYSQL_USER: aesthetix
+      MYSQL_PASSWORD: aesthetix_pass
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - aesthetix-net
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: aesthetix-redis
+    restart: unless-stopped
+    command: redis-server --save 60 1 --loglevel notice
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - aesthetix-net
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  aesthetix-net:
+    driver: bridge
+
+volumes:
+  mysql_data:
+  redis_data:

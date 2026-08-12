@@ -1,5 +1,6 @@
 package com.vitorcsouza.aesthetix.domain.repository;
 
+import com.vitorcsouza.aesthetix.domain.model.Package;
 import com.vitorcsouza.aesthetix.domain.model.PackageStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 

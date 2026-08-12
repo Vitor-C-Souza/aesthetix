@@ -28,9 +28,9 @@ jobs:
       - name: Compilar e executar testes
         run: |
           if [ -f "./mvnw" ]; then
-            ./mvnw clean verify
+            ./mvnw clean verify -B --no-transfer-progress
           else
-            mvn clean verify
+            mvn clean verify -B --no-transfer-progress
           fi
 
       - name: Publicar relatório de testes (JUnit)

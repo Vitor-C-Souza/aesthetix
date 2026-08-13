@@ -1,6 +1,5 @@
 package com.vitorcsouza.aesthetix.adapter.out.persistence;
 
-import com.vitorcsouza.aesthetix.adapter.out.persistence.entity.AnamnesisEntity;
 import com.vitorcsouza.aesthetix.adapter.out.persistence.mapper.AnamnesisMapper;
 import com.vitorcsouza.aesthetix.adapter.out.persistence.repository.SpringDataAnamnesisRepository;
 import com.vitorcsouza.aesthetix.domain.model.Anamnesis;
@@ -20,8 +19,9 @@ public class AnamnesisPersistenceAdapter implements AnamnesisOutputPort {
 
     @Override
     public Anamnesis save(Anamnesis anamnesis) {
-        AnamnesisEntity entity = mapper.toEntity(anamnesis);
-        return mapper.toDomain(repository.save(entity));
+        var entity = mapper.toEntity(anamnesis);
+        var saved = repository.save(entity);
+        return mapper.toDomain(saved);
     }
 
     @Override
@@ -30,15 +30,11 @@ public class AnamnesisPersistenceAdapter implements AnamnesisOutputPort {
     }
 
     @Override
-    public List<Anamnesis> findByPatientIdOrderByCreatedAtDesc(UUID patientId) {
-        return repository.findByPatientIdOrderByCreatedAtDesc(patientId).stream()
+    public List<Anamnesis> findByPatientId(UUID patientId) {
+        return repository.findByPatientId(patientId)
+                .stream()
                 .map(mapper::toDomain)
                 .toList();
-    }
-
-    @Override
-    public Optional<Anamnesis> findFirstByPatientIdOrderByCreatedAtDesc(UUID patientId) {
-        return repository.findFirstByPatientIdOrderByCreatedAtDesc(patientId).map(mapper::toDomain);
     }
 
     @Override

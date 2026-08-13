@@ -11,9 +11,7 @@ public interface AnamnesisOutputPort {
 
     Optional<Anamnesis> findById(UUID id);
 
-    List<Anamnesis> findByPatientIdOrderByCreatedAtDesc(UUID patientId);
-
-    Optional<Anamnesis> findFirstByPatientIdOrderByCreatedAtDesc(UUID patientId);
+    List<Anamnesis> findByPatientId(UUID patientId);
 
     void deleteById(UUID id);
 }

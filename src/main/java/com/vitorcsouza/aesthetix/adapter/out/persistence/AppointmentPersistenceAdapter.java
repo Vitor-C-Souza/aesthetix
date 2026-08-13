@@ -1,10 +1,8 @@
 package com.vitorcsouza.aesthetix.adapter.out.persistence;
 
-import com.vitorcsouza.aesthetix.adapter.out.persistence.entity.AppointmentEntity;
 import com.vitorcsouza.aesthetix.adapter.out.persistence.mapper.AppointmentMapper;
 import com.vitorcsouza.aesthetix.adapter.out.persistence.repository.SpringDataAppointmentRepository;
 import com.vitorcsouza.aesthetix.domain.model.Appointment;
-import com.vitorcsouza.aesthetix.domain.model.AppointmentStatus;
 import com.vitorcsouza.aesthetix.domain.port.out.AppointmentOutputPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -22,8 +20,9 @@ public class AppointmentPersistenceAdapter implements AppointmentOutputPort {
 
     @Override
     public Appointment save(Appointment appointment) {
-        AppointmentEntity entity = mapper.toEntity(appointment);
-        return mapper.toDomain(repository.save(entity));
+        var entity = mapper.toEntity(appointment);
+        var saved = repository.save(entity);
+        return mapper.toDomain(saved);
     }
 
     @Override
@@ -32,35 +31,19 @@ public class AppointmentPersistenceAdapter implements AppointmentOutputPort {
     }
 
     @Override
-    public List<Appointment> findByPatientIdOrderByStartTimeDesc(UUID patientId) {
-        return repository.findByPatientIdOrderByStartTimeDesc(patientId).stream()
+    public List<Appointment> findByProfessionalIdAndStartTimeBetween(UUID professionalId, LocalDateTime start, LocalDateTime end) {
+        return repository.findByProfessionalIdAndStartTimeBetween(professionalId, start, end)
+                .stream()
                 .map(mapper::toDomain)
                 .toList();
     }
 
     @Override
-    public List<Appointment> findByProfessionalIdAndStartTimeBetweenOrderByStartTimeAsc(
-            UUID professionalId, LocalDateTime start, LocalDateTime end
-    ) {
-        return repository.findByProfessionalIdAndStartTimeBetweenOrderByStartTimeAsc(professionalId, start, end).stream()
+    public List<Appointment> findByPatientId(UUID patientId) {
+        return repository.findByPatientId(patientId)
+                .stream()
                 .map(mapper::toDomain)
                 .toList();
-    }
-
-    @Override
-    public List<Appointment> findByStatusAndStartTimeBetween(
-            AppointmentStatus status, LocalDateTime start, LocalDateTime end
-    ) {
-        return repository.findByStatusAndStartTimeBetween(status, start, end).stream()
-                .map(mapper::toDomain)
-                .toList();
-    }
-
-    @Override
-    public boolean existsOverlappingAppointment(
-            UUID professionalId, LocalDateTime startTime, LocalDateTime endTime, UUID appointmentId
-    ) {
-        return repository.existsOverlappingAppointment(professionalId, startTime, endTime, appointmentId);
     }
 
     @Override

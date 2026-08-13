@@ -1,7 +1,6 @@
 package com.vitorcsouza.aesthetix.domain.port.out;
 
 import com.vitorcsouza.aesthetix.domain.model.Appointment;
-import com.vitorcsouza.aesthetix.domain.model.AppointmentStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -13,19 +12,9 @@ public interface AppointmentOutputPort {
 
     Optional<Appointment> findById(UUID id);
 
-    List<Appointment> findByPatientIdOrderByStartTimeDesc(UUID patientId);
+    List<Appointment> findByProfessionalIdAndStartTimeBetween(UUID professionalId, LocalDateTime start, LocalDateTime end);
 
-    List<Appointment> findByProfessionalIdAndStartTimeBetweenOrderByStartTimeAsc(
-            UUID professionalId, LocalDateTime start, LocalDateTime end
-    );
-
-    List<Appointment> findByStatusAndStartTimeBetween(
-            AppointmentStatus status, LocalDateTime start, LocalDateTime end
-    );
-
-    boolean existsOverlappingAppointment(
-            UUID professionalId, LocalDateTime startTime, LocalDateTime endTime, UUID appointmentId
-    );
+    List<Appointment> findByPatientId(UUID patientId);
 
     void deleteById(UUID id);
 }

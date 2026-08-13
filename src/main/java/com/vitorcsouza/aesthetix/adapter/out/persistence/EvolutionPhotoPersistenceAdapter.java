@@ -1,10 +1,8 @@
 package com.vitorcsouza.aesthetix.adapter.out.persistence;
 
-import com.vitorcsouza.aesthetix.adapter.out.persistence.entity.EvolutionPhotoEntity;
 import com.vitorcsouza.aesthetix.adapter.out.persistence.mapper.EvolutionPhotoMapper;
 import com.vitorcsouza.aesthetix.adapter.out.persistence.repository.SpringDataEvolutionPhotoRepository;
 import com.vitorcsouza.aesthetix.domain.model.EvolutionPhoto;
-import com.vitorcsouza.aesthetix.domain.model.PhotoType;
 import com.vitorcsouza.aesthetix.domain.port.out.EvolutionPhotoOutputPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -21,8 +19,9 @@ public class EvolutionPhotoPersistenceAdapter implements EvolutionPhotoOutputPor
 
     @Override
     public EvolutionPhoto save(EvolutionPhoto evolutionPhoto) {
-        EvolutionPhotoEntity entity = mapper.toEntity(evolutionPhoto);
-        return mapper.toDomain(repository.save(entity));
+        var entity = mapper.toEntity(evolutionPhoto);
+        var savedEntity = repository.save(entity);
+        return mapper.toDomain(savedEntity);
     }
 
     @Override
@@ -31,22 +30,17 @@ public class EvolutionPhotoPersistenceAdapter implements EvolutionPhotoOutputPor
     }
 
     @Override
-    public List<EvolutionPhoto> findByPatientIdOrderByCreatedAtDesc(UUID patientId) {
-        return repository.findByPatientIdOrderByCreatedAtDesc(patientId).stream()
+    public List<EvolutionPhoto> findByPatientId(UUID patientId) {
+        return repository.findByPatientId(patientId)
+                .stream()
                 .map(mapper::toDomain)
                 .toList();
     }
 
     @Override
-    public List<EvolutionPhoto> findByAppointmentIdOrderByCreatedAtDesc(UUID appointmentId) {
-        return repository.findByAppointmentIdOrderByCreatedAtDesc(appointmentId).stream()
-                .map(mapper::toDomain)
-                .toList();
-    }
-
-    @Override
-    public List<EvolutionPhoto> findByPatientIdAndPhotoTypeOrderByCreatedAtDesc(UUID patientId, PhotoType photoType) {
-        return repository.findByPatientIdAndPhotoTypeOrderByCreatedAtDesc(patientId, photoType).stream()
+    public List<EvolutionPhoto> findByAppointmentId(UUID appointmentId) {
+        return repository.findByAppointmentId(appointmentId)
+                .stream()
                 .map(mapper::toDomain)
                 .toList();
     }
@@ -55,4 +49,5 @@ public class EvolutionPhotoPersistenceAdapter implements EvolutionPhotoOutputPor
     public void deleteById(UUID id) {
         repository.deleteById(id);
     }
+
 }

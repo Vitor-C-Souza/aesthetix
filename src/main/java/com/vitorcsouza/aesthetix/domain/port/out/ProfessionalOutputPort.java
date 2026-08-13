@@ -1,18 +1,24 @@
-package com.vitorcsouza.aesthetix.domain.repository;
+package com.vitorcsouza.aesthetix.domain.port.out;
 
 import com.vitorcsouza.aesthetix.domain.model.Professional;
-import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.List;
 
-public interface ProfessionalRepository extends JpaRepository<Professional, UUID> {
+public interface ProfessionalOutputPort {
+    Professional save(Professional professional);
+
+    void deleteById(UUID id);
+
+    Optional<Professional> findById(UUID id);
+
+    boolean existsByCpf(String cpf);
+
     Optional<Professional> findByCpf(String cpf);
 
     List<Professional> findByActiveTrue();
 
     List<Professional> findBySpecialtyIgnoreCaseAndActiveTrue(String specialty);
 
-    boolean existsByCpf(String cpf);
 }

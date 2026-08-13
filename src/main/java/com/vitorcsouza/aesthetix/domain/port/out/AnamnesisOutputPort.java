@@ -1,14 +1,19 @@
-package com.vitorcsouza.aesthetix.domain.repository;
+package com.vitorcsouza.aesthetix.domain.port.out;
 
 import com.vitorcsouza.aesthetix.domain.model.Anamnesis;
-import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.List;
 
-public interface AnamnesisRepository extends JpaRepository<Anamnesis, UUID> {
+public interface AnamnesisOutputPort {
+    Anamnesis save(Anamnesis anamnesis);
+
+    Optional<Anamnesis> findById(UUID id);
+
     List<Anamnesis> findByPatientIdOrderByCreatedAtDesc(UUID patientId);
 
     Optional<Anamnesis> findFirstByPatientIdOrderByCreatedAtDesc(UUID patientId);
+
+    void deleteById(UUID id);
 }

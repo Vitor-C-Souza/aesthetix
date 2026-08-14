@@ -18,12 +18,19 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/professionals")
 @io.swagger.v3.oas.annotations.tags.Tag(name = "Professional")
+@io.swagger.v3.oas.annotations.security.SecurityRequirement(name = "bearerAuth")
 @RequiredArgsConstructor
 public class ProfessionalController {
 
     private final ProfessionalInputPort professionalInputPort;
     private final ProfessionalWebMapper webMapper;
 
+    @io.swagger.v3.oas.annotations.Operation(summary = "Create professional")
+    @io.swagger.v3.oas.annotations.responses.ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "201", description = "Created"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Invalid request"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "Unauthorized")
+    })
     @PostMapping
     public ResponseEntity<ProfessionalResponseDTO> create(@RequestBody @Valid ProfessionalRequestDTO requestDTO, UriComponentsBuilder uriBuilder) {
         Professional professional = webMapper.toDomain(requestDTO);
@@ -32,15 +39,26 @@ public class ProfessionalController {
         return ResponseEntity.created(uri).body(webMapper.toResponse(created));
     }
 
+    @io.swagger.v3.oas.annotations.Operation(summary = "Get professional by id")
+    @io.swagger.v3.oas.annotations.responses.ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Not Found"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "Unauthorized")
+    })
     @GetMapping("/{id}")
     public ResponseEntity<ProfessionalResponseDTO> findById(@PathVariable UUID id) {
         Professional professional = professionalInputPort.findById(id);
         return ResponseEntity.ok(webMapper.toResponse(professional));
     }
 
-    @GetMapping
-    public ResponseEntity<List<ProfessionalResponseDTO>> findAll(
-            @RequestParam(required = false) String specialty) {
+    @io.swagger.v3.oas.annotations.Operation(summary = "List professionals")
+        @io.swagger.v3.oas.annotations.responses.ApiResponses({
+                @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK"),
+                @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "Unauthorized")
+        })
+        @GetMapping
+        public ResponseEntity<List<ProfessionalResponseDTO>> findAll(
+                @RequestParam(required = false) String specialty) {
 
         List<Professional> list = (specialty != null && !specialty.isBlank())
                 ? professionalInputPort.findBySpecialty(specialty)
@@ -53,8 +71,14 @@ public class ProfessionalController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<ProfessionalResponseDTO> update(
+    @io.swagger.v3.oas.annotations.Operation(summary = "Update professional")
+        @io.swagger.v3.oas.annotations.responses.ApiResponses({
+                @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK"),
+                @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Invalid request"),
+                @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "Unauthorized")
+        })
+        @PutMapping("/{id}")
+        public ResponseEntity<ProfessionalResponseDTO> update(
             @PathVariable UUID id,
             @RequestBody @Valid ProfessionalRequestDTO requestDTO) {
         Professional professional = webMapper.toDomain(requestDTO);
@@ -62,8 +86,13 @@ public class ProfessionalController {
         return ResponseEntity.ok(webMapper.toResponse(updated));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable UUID id) {
+    @io.swagger.v3.oas.annotations.Operation(summary = "Delete professional")
+        @io.swagger.v3.oas.annotations.responses.ApiResponses({
+                @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "204", description = "No Content"),
+                @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "Unauthorized")
+        })
+        @DeleteMapping("/{id}")
+        public ResponseEntity<Void> delete(@PathVariable UUID id) {
         professionalInputPort.delete(id);
         return ResponseEntity.noContent().build();
     }

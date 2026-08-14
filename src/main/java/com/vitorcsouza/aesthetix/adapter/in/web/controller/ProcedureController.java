@@ -18,11 +18,18 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/procedures")
 @io.swagger.v3.oas.annotations.tags.Tag(name = "Procedure")
+@io.swagger.v3.oas.annotations.security.SecurityRequirement(name = "bearerAuth")
 @RequiredArgsConstructor
 public class ProcedureController {
     private final ProcedureInputPort procedureInputPort;
     private final ProcedureWebMapper webMapper;
 
+    @io.swagger.v3.oas.annotations.Operation(summary = "Create procedure")
+    @io.swagger.v3.oas.annotations.responses.ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "201", description = "Created"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Invalid request"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "Unauthorized")
+    })
     @PostMapping
     public ResponseEntity<ProcedureResponseDTO> create(@RequestBody @Valid ProcedureRequestDTO requestDTO, UriComponentsBuilder uriBuilder) {
         Procedure procedure = webMapper.toDomain(requestDTO);
@@ -31,14 +38,25 @@ public class ProcedureController {
         return ResponseEntity.created(uri).body(webMapper.toResponse(created));
     }
 
+    @io.swagger.v3.oas.annotations.Operation(summary = "Get procedure by id")
+    @io.swagger.v3.oas.annotations.responses.ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Not Found"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "Unauthorized")
+    })
     @GetMapping("/{id}")
     public ResponseEntity<ProcedureResponseDTO> findById(@PathVariable UUID id) {
         Procedure procedure = procedureInputPort.findById(id);
         return ResponseEntity.ok(webMapper.toResponse(procedure));
     }
 
-    @GetMapping
-    public ResponseEntity<List<ProcedureResponseDTO>> findAll() {
+    @io.swagger.v3.oas.annotations.Operation(summary = "List procedures")
+        @io.swagger.v3.oas.annotations.responses.ApiResponses({
+                @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK"),
+                @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "Unauthorized")
+        })
+        @GetMapping
+        public ResponseEntity<List<ProcedureResponseDTO>> findAll() {
         List<Procedure> list = procedureInputPort.findAllActive();
         List<ProcedureResponseDTO> response = list.stream()
                 .map(webMapper::toResponse)
@@ -47,6 +65,12 @@ public class ProcedureController {
         return ResponseEntity.ok(response);
     }
 
+    @io.swagger.v3.oas.annotations.Operation(summary = "Update procedure")
+    @io.swagger.v3.oas.annotations.responses.ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Invalid request"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "Unauthorized")
+    })
     @PutMapping("/{id}")
     public ResponseEntity<ProcedureResponseDTO> update(
             @PathVariable UUID id,
@@ -56,6 +80,11 @@ public class ProcedureController {
         return ResponseEntity.ok(webMapper.toResponse(updated));
     }
 
+    @io.swagger.v3.oas.annotations.Operation(summary = "Delete procedure")
+    @io.swagger.v3.oas.annotations.responses.ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "204", description = "No Content"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "Unauthorized")
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
         procedureInputPort.delete(id);

@@ -20,11 +20,18 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/financial-records")
 @io.swagger.v3.oas.annotations.tags.Tag(name = "FinancialRecord")
+@io.swagger.v3.oas.annotations.security.SecurityRequirement(name = "bearerAuth")
 public class FinancialRecordController {
 
     private final FinancialRecordInputPort financialInputPort;
     private final FinancialRecordWebMapper webMapper;
 
+    @io.swagger.v3.oas.annotations.Operation(summary = "Create financial record")
+    @io.swagger.v3.oas.annotations.responses.ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "201", description = "Created"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Invalid request"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "Unauthorized")
+    })
     @PostMapping
     public ResponseEntity<FinancialRecordResponseDTO> create(@RequestBody @Valid FinancialRecordRequestDTO requestDTO, UriComponentsBuilder uriBuilder) {
         FinancialRecord record = webMapper.toDomain(requestDTO);
@@ -33,12 +40,23 @@ public class FinancialRecordController {
         return ResponseEntity.created(uri).body(webMapper.toResponse(created));
     }
 
+    @io.swagger.v3.oas.annotations.Operation(summary = "Get financial record by id")
+    @io.swagger.v3.oas.annotations.responses.ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Not Found"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "Unauthorized")
+    })
     @GetMapping("/{id}")
     public ResponseEntity<FinancialRecordResponseDTO> findById(@PathVariable UUID id) {
         FinancialRecord record = financialInputPort.findById(id);
         return ResponseEntity.ok(webMapper.toResponse(record));
     }
 
+    @io.swagger.v3.oas.annotations.Operation(summary = "List financial records by patient")
+    @io.swagger.v3.oas.annotations.responses.ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "Unauthorized")
+    })
     @GetMapping("/patient/{patientId}")
     public ResponseEntity<List<FinancialRecordResponseDTO>> findByPatientId(@PathVariable UUID patientId) {
         List<FinancialRecord> list = financialInputPort.findByPatientId(patientId);
@@ -49,6 +67,11 @@ public class FinancialRecordController {
         return ResponseEntity.ok(response);
     }
 
+    @io.swagger.v3.oas.annotations.Operation(summary = "List financial records by status")
+    @io.swagger.v3.oas.annotations.responses.ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "Unauthorized")
+    })
     @GetMapping("/status/{status}")
     public ResponseEntity<List<FinancialRecordResponseDTO>> findByStatus(@PathVariable PaymentStatus status) {
         List<FinancialRecord> list = financialInputPort.findByStatus(status);
@@ -59,6 +82,12 @@ public class FinancialRecordController {
         return ResponseEntity.ok(response);
     }
 
+    @io.swagger.v3.oas.annotations.Operation(summary = "Update financial record")
+    @io.swagger.v3.oas.annotations.responses.ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Invalid request"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "Unauthorized")
+    })
     @PutMapping("/{id}")
     public ResponseEntity<FinancialRecordResponseDTO> update(
             @PathVariable UUID id,
@@ -68,6 +97,11 @@ public class FinancialRecordController {
         return ResponseEntity.ok(webMapper.toResponse(updated));
     }
 
+    @io.swagger.v3.oas.annotations.Operation(summary = "Delete financial record")
+    @io.swagger.v3.oas.annotations.responses.ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "204", description = "No Content"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "Unauthorized")
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
         financialInputPort.delete(id);

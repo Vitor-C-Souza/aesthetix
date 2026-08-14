@@ -1,7 +1,6 @@
 package com.vitorcsouza.aesthetix.domain.port.out;
 
 import com.vitorcsouza.aesthetix.domain.model.Package;
-import com.vitorcsouza.aesthetix.domain.model.PackageStatus;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,9 +11,7 @@ public interface PackageOutputPort {
 
     Optional<Package> findById(UUID id);
 
-    List<Package> findByPatientIdOrderByCreatedAtDesc(UUID patientId);
-
-    List<Package> findByPatientIdAndStatus(UUID patientId, PackageStatus status);
+    List<Package> findByPatientId(UUID patientId);
 
     void deleteById(UUID id);
 }

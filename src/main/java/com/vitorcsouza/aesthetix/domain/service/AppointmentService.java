@@ -1,5 +1,7 @@
 package com.vitorcsouza.aesthetix.domain.service;
 
+import com.vitorcsouza.aesthetix.domain.exception.BusinessException;
+import com.vitorcsouza.aesthetix.domain.exception.ResourceNotFoundException;
 import com.vitorcsouza.aesthetix.domain.model.*;
 import com.vitorcsouza.aesthetix.domain.port.in.AppointmentInputPort;
 import com.vitorcsouza.aesthetix.domain.port.out.AppointmentOutputPort;
@@ -27,11 +29,11 @@ public class AppointmentService implements AppointmentInputPort {
         validateTimeRange(appointment.getStartTime(), appointment.getEndTime());
 
         Patient patient = patientOutputPort.findById(appointment.getPatient().getId())
-                .orElseThrow(() -> new IllegalArgumentException("Paciente não encontrado."));
+                .orElseThrow(() -> new ResourceNotFoundException("Paciente não encontrado com o ID: " + appointment.getPatient().getId()));
         Professional professional = professionalOutputPort.findById(appointment.getProfessional().getId())
-                .orElseThrow(() -> new IllegalArgumentException("Profissional não encontrado."));
+                .orElseThrow(() -> new ResourceNotFoundException("Profissional não encontrado com o ID: " + appointment.getProfessional().getId()));
         Procedure procedure = procedureOutputPort.findById(appointment.getProcedure().getId())
-                .orElseThrow(() -> new IllegalArgumentException("Procedimento não encontrado."));
+                .orElseThrow(() -> new ResourceNotFoundException("Procedimento não encontrado com o ID: " + appointment.getProcedure().getId()));
 
         appointment.setPatient(patient);
         appointment.setProfessional(professional);
@@ -67,7 +69,7 @@ public class AppointmentService implements AppointmentInputPort {
     @Override
     public Appointment findById(UUID id) {
         return appointmentOutputPort.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Agendamento não encontrado com o ID: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Agendamento não encontrado com o ID: " + id));
     }
 
     @Override
@@ -89,7 +91,7 @@ public class AppointmentService implements AppointmentInputPort {
 
     private void validateTimeRange(LocalDateTime start, LocalDateTime end) {
         if (start == null || end == null || !end.isAfter(start)) {
-            throw new IllegalArgumentException("A data/hora final deve ser posterior à data/hora inicial.");
+            throw new BusinessException("A data/hora final deve ser posterior à data/hora inicial.");
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.vitorcsouza.aesthetix.domain.service;
 
+import com.vitorcsouza.aesthetix.domain.exception.ResourceNotFoundException;
 import com.vitorcsouza.aesthetix.domain.model.Anamnesis;
 import com.vitorcsouza.aesthetix.domain.model.Patient;
 import com.vitorcsouza.aesthetix.domain.model.Professional;
@@ -24,10 +25,10 @@ public class AnamnesisService implements AnamnesisInputPort {
     @Override
     public Anamnesis create(Anamnesis anamnesis) {
         Patient patient = patientOutputPort.findById(anamnesis.getPatient().getId())
-                .orElseThrow(() -> new IllegalArgumentException("Paciente não encontrado."));
+                .orElseThrow(() -> new ResourceNotFoundException("Paciente não encontrado."));
 
         Professional professional = professionalOutputPort.findById(anamnesis.getProfessional().getId())
-                .orElseThrow(() -> new IllegalArgumentException("Profissional não encontrado."));
+                .orElseThrow(() -> new ResourceNotFoundException("Profissional não encontrado."));
 
         anamnesis.setPatient(patient);
         anamnesis.setProfessional(professional);
@@ -48,7 +49,7 @@ public class AnamnesisService implements AnamnesisInputPort {
     @Override
     public Anamnesis findById(UUID id) {
         return anamnesisOutputPort.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Anamnese não encontrada com o ID: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Anamnese não encontrada com o ID: " + id));
     }
 
     @Override

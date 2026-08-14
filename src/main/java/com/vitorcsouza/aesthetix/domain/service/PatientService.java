@@ -1,5 +1,6 @@
 package com.vitorcsouza.aesthetix.domain.service;
 
+import com.vitorcsouza.aesthetix.domain.exception.ResourceNotFoundException;
 import com.vitorcsouza.aesthetix.domain.model.Patient;
 import com.vitorcsouza.aesthetix.domain.port.in.PatientInputPort;
 import com.vitorcsouza.aesthetix.domain.port.out.PatientOutputPort;
@@ -19,7 +20,7 @@ public class PatientService implements PatientInputPort {
     @Override
     public Patient create(Patient patient) {
         if (patientOutputPort.existsByCpf(patient.getCpf())) {
-            throw new IllegalArgumentException("Já existe um paciente cadastrado com este CPF.");
+            throw new ResourceNotFoundException("Já existe um paciente cadastrado com este CPF.");
         }
         return patientOutputPort.save(patient);
     }
@@ -40,7 +41,7 @@ public class PatientService implements PatientInputPort {
     @Override
     public Patient findById(UUID id) {
         return patientOutputPort.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Paciente não encontrado com o ID: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Paciente não encontrado com o ID: " + id));
     }
 
     @Override

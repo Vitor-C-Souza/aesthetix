@@ -1,5 +1,6 @@
 package com.vitorcsouza.aesthetix.domain.service;
 
+import com.vitorcsouza.aesthetix.domain.exception.ResourceNotFoundException;
 import com.vitorcsouza.aesthetix.domain.model.Equipment;
 import com.vitorcsouza.aesthetix.domain.port.in.EquipmentInputPort;
 import com.vitorcsouza.aesthetix.domain.port.out.EquipmentOutputPort;
@@ -37,7 +38,7 @@ public class EquipmentService implements EquipmentInputPort {
     @Override
     public Equipment findById(UUID id) {
         return equipmentOutputPort.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Equipamento não encontrado com o ID: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Equipamento não encontrado com o ID: " + id));
     }
 
     @Override

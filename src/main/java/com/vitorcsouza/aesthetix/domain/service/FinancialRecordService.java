@@ -1,5 +1,6 @@
 package com.vitorcsouza.aesthetix.domain.service;
 
+import com.vitorcsouza.aesthetix.domain.exception.ResourceNotFoundException;
 import com.vitorcsouza.aesthetix.domain.model.*;
 import com.vitorcsouza.aesthetix.domain.port.in.FinancialRecordInputPort;
 import com.vitorcsouza.aesthetix.domain.port.out.AppointmentOutputPort;
@@ -25,18 +26,18 @@ public class FinancialRecordService implements FinancialRecordInputPort {
     @Override
     public FinancialRecord create(FinancialRecord record) {
         Patient patient = patientOutputPort.findById(record.getPatient().getId())
-                .orElseThrow(() -> new IllegalArgumentException("Paciente não encontrado."));
+                .orElseThrow(() -> new ResourceNotFoundException("Paciente não encontrado com o ID: " + record.getPatient().getId()));
         record.setPatient(patient);
 
         if (record.getAppointment() != null && record.getAppointment().getId() != null) {
             Appointment appointment = appointmentOutputPort.findById(record.getAppointment().getId())
-                    .orElseThrow(() -> new IllegalArgumentException("Agendamento não encontrado."));
+                    .orElseThrow(() -> new ResourceNotFoundException("Agendamento não encontrado com o ID: " + record.getAppointment().getId()));
             record.setAppointment(appointment);
         }
 
         if (record.getProfessional() != null && record.getProfessional().getId() != null) {
             Professional professional = professionalOutputPort.findById(record.getProfessional().getId())
-                    .orElseThrow(() -> new IllegalArgumentException("Profissional não encontrado."));
+                    .orElseThrow(() -> new ResourceNotFoundException("Profissional não encontrado com o ID: " + record.getProfessional().getId()));
             record.setProfessional(professional);
         }
 
@@ -68,7 +69,7 @@ public class FinancialRecordService implements FinancialRecordInputPort {
     @Override
     public FinancialRecord findById(UUID id) {
         return financialOutputPort.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Registro financeiro não encontrado com o ID: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Registro financeiro não encontrado com o ID: " + id));
     }
 
     @Override

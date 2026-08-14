@@ -1,5 +1,6 @@
 package com.vitorcsouza.aesthetix.domain.service;
 
+import com.vitorcsouza.aesthetix.domain.exception.ResourceNotFoundException;
 import com.vitorcsouza.aesthetix.domain.model.Professional;
 import com.vitorcsouza.aesthetix.domain.port.in.ProfessionalInputPort;
 import com.vitorcsouza.aesthetix.domain.port.out.ProfessionalOutputPort;
@@ -18,7 +19,7 @@ public class ProfessionalService implements ProfessionalInputPort {
     @Override
     public Professional create(Professional professional) {
         if (professionalOutputPort.existsByCpf(professional.getCpf())) {
-            throw new IllegalArgumentException("Já existe um profissional cadastrado com este CPF.");
+            throw new ResourceNotFoundException("Já existe um profissional cadastrado com este CPF.");
         }
         return professionalOutputPort.save(professional);
     }
@@ -42,7 +43,7 @@ public class ProfessionalService implements ProfessionalInputPort {
     @Override
     public Professional findById(UUID id) {
         return professionalOutputPort.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Profissional não encontrado com o ID: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Profissional não encontrado com o ID: " + id));
     }
 
     @Override

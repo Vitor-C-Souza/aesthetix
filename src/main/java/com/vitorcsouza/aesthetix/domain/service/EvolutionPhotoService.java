@@ -1,5 +1,6 @@
 package com.vitorcsouza.aesthetix.domain.service;
 
+import com.vitorcsouza.aesthetix.domain.exception.ResourceNotFoundException;
 import com.vitorcsouza.aesthetix.domain.model.Appointment;
 import com.vitorcsouza.aesthetix.domain.model.EvolutionPhoto;
 import com.vitorcsouza.aesthetix.domain.model.Patient;
@@ -24,13 +25,13 @@ public class EvolutionPhotoService implements EvolutionPhotoInputPort {
     @Override
     public EvolutionPhoto create(EvolutionPhoto photo) {
         Patient patient = patientOutputPort.findById(photo.getPatient().getId())
-                .orElseThrow(() -> new IllegalArgumentException("Paciente não encontrado."));
+                .orElseThrow(() -> new ResourceNotFoundException("Paciente não encontrado."));
 
         photo.setPatient(patient);
 
         if (photo.getAppointment() != null && photo.getAppointment().getId() != null) {
             Appointment appointment = appointmentOutputPort.findById(photo.getAppointment().getId())
-                    .orElseThrow(() -> new IllegalArgumentException("Agendamento não encontrado."));
+                    .orElseThrow(() -> new ResourceNotFoundException("Agendamento não encontrado."));
             photo.setAppointment(appointment);
         }
 
@@ -51,7 +52,7 @@ public class EvolutionPhotoService implements EvolutionPhotoInputPort {
     @Override
     public EvolutionPhoto findById(UUID id) {
         return photoOutputPort.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Foto de evolução não encontrada com o ID: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Foto de evolução não encontrada com o ID: " + id));
     }
 
     @Override

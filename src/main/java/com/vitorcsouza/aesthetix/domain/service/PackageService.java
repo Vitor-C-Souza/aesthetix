@@ -1,5 +1,6 @@
 package com.vitorcsouza.aesthetix.domain.service;
 
+import com.vitorcsouza.aesthetix.domain.exception.ResourceNotFoundException;
 import com.vitorcsouza.aesthetix.domain.model.Package;
 import com.vitorcsouza.aesthetix.domain.model.PackageStatus;
 import com.vitorcsouza.aesthetix.domain.model.Patient;
@@ -25,10 +26,10 @@ public class PackageService implements PackageInputPort {
     @Override
     public Package create(Package sessionPackage) {
         Patient patient = patientOutputPort.findById(sessionPackage.getPatient().getId())
-                .orElseThrow(() -> new IllegalArgumentException("Paciente não encontrado."));
+                .orElseThrow(() -> new ResourceNotFoundException("Paciente não encontrado."));
 
         Procedure procedure = procedureOutputPort.findById(sessionPackage.getProcedure().getId())
-                .orElseThrow(() -> new IllegalArgumentException("Procedimento não encontrado."));
+                .orElseThrow(() -> new ResourceNotFoundException("Procedimento não encontrado."));
 
         sessionPackage.setPatient(patient);
         sessionPackage.setProcedure(procedure);
@@ -57,7 +58,7 @@ public class PackageService implements PackageInputPort {
     @Override
     public Package findById(UUID id) {
         return packageOutputPort.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Pacote não encontrado com o ID: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Pacote não encontrado com o ID: " + id));
     }
 
     @Override

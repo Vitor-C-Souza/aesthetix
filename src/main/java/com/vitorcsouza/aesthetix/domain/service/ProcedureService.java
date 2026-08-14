@@ -1,5 +1,6 @@
 package com.vitorcsouza.aesthetix.domain.service;
 
+import com.vitorcsouza.aesthetix.domain.exception.ResourceNotFoundException;
 import com.vitorcsouza.aesthetix.domain.model.Procedure;
 import com.vitorcsouza.aesthetix.domain.port.in.ProcedureInputPort;
 import com.vitorcsouza.aesthetix.domain.port.out.ProcedureOutputPort;
@@ -42,7 +43,7 @@ public class ProcedureService implements ProcedureInputPort {
     @Override
     public Procedure findById(UUID id) {
         return procedureOutputPort.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Procedimento não encontrado com o ID: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Procedimento não encontrado com o ID: " + id));
     }
 
     @Override

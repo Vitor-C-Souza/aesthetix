@@ -3,7 +3,9 @@ package com.vitorcsouza.aesthetix.adapter.in.web.dto;
 import com.vitorcsouza.aesthetix.domain.model.Appointment;
 import com.vitorcsouza.aesthetix.domain.model.EvolutionPhoto;
 import com.vitorcsouza.aesthetix.domain.model.Patient;
+import org.springframework.stereotype.Component;
 
+@Component
 public class EvolutionPhotoWebMapper {
     public EvolutionPhoto toDomain(EvolutionPhotoRequestDTO dto) {
         if (dto == null) return null;

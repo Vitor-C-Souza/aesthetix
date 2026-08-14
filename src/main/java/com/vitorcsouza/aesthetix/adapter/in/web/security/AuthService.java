@@ -27,7 +27,7 @@ public class AuthService {
 
     public AuthResponseDTO register(RegisterRequestDTO dto) {
         if (userRepository.existsByUsername(dto.getUsername())) {
-            throw new RuntimeException("Username already exists");
+            throw new com.vitorcsouza.aesthetix.domain.exception.BusinessException("Username already exists");
         }
 
         Role role = Role.RECEPTIONIST;
@@ -52,11 +52,11 @@ public class AuthService {
 
     public AuthResponseDTO login(AuthRequestDTO dto) {
         Optional<UserEntity> opt = userRepository.findByUsername(dto.getUsername());
-        if (opt.isEmpty()) throw new RuntimeException("Invalid credentials");
+        if (opt.isEmpty()) throw new com.vitorcsouza.aesthetix.domain.exception.BusinessException("Invalid credentials");
 
         UserEntity user = opt.get();
         if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
-            throw new RuntimeException("Invalid credentials");
+            throw new com.vitorcsouza.aesthetix.domain.exception.BusinessException("Invalid credentials");
         }
 
         String token = jwtUtil.generateToken(user.getUsername(), user.getRoles());

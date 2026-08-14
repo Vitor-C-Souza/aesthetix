@@ -2,6 +2,7 @@ package com.vitorcsouza.aesthetix.adapter.in.web.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -13,9 +14,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final JwtUtil jwtUtil;
+    private final JwtAuthEntryPoint jwtAuthEntryPoint;
 
-    public SecurityConfig(JwtUtil jwtUtil) {
+    public SecurityConfig(JwtUtil jwtUtil, JwtAuthEntryPoint jwtAuthEntryPoint) {
         this.jwtUtil = jwtUtil;
+        this.jwtAuthEntryPoint = jwtAuthEntryPoint;
     }
 
     @Bean
@@ -25,9 +28,34 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint(jwtAuthEntryPoint)
+                        .accessDeniedHandler(jwtAuthEntryPoint)
+                )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/auth/**").permitAll()
-                        .anyRequest().authenticated()
+
+                        // Allow read access to common resources for all roles
+                        .requestMatchers(HttpMethod.GET, "/api/v1/**").hasAnyRole("ADMIN", "PROFESSIONAL", "RECEPTIONIST")
+
+                        // Professionals management: only ADMIN can create/update/delete
+                        .requestMatchers(HttpMethod.POST, "/api/v1/professionals/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/professionals/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/professionals/**").hasRole("ADMIN")
+
+                        // Patients: created/updated by RECEPTIONIST or ADMIN
+                        .requestMatchers(HttpMethod.POST, "/api/v1/patients/**").hasAnyRole("ADMIN","RECEPTIONIST")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/patients/**").hasAnyRole("ADMIN","RECEPTIONIST")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/patients/**").hasRole("ADMIN")
+
+                        // Appointments: created/updated by RECEPTIONIST, PROFESSIONAL or ADMIN
+                        .requestMatchers(HttpMethod.POST, "/api/v1/appointments/**").hasAnyRole("ADMIN","RECEPTIONIST","PROFESSIONAL")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/appointments/**").hasAnyRole("ADMIN","RECEPTIONIST","PROFESSIONAL")
+                        .requestMatchers(HttpMethod.PATCH, "/api/v1/appointments/**").hasAnyRole("ADMIN","RECEPTIONIST","PROFESSIONAL")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/appointments/**").hasAnyRole("ADMIN","RECEPTIONIST")
+
+                        // Default: any other request requires ADMIN
+                        .anyRequest().hasRole("ADMIN")
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 

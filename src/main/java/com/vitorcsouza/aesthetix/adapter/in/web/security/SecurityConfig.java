@@ -33,30 +33,42 @@ public class SecurityConfig {
                         .accessDeniedHandler(jwtAuthEntryPoint)
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/auth/**").permitAll()
+                                        // public auth endpoints
+                                        .requestMatchers("/api/v1/auth/**").permitAll()
 
-                        // Allow read access to common resources for all roles
-                        .requestMatchers(HttpMethod.GET, "/api/v1/**").hasAnyRole("ADMIN", "PROFESSIONAL", "RECEPTIONIST")
+                                        // Swagger/OpenAPI and static resources - allow public access for UI
+                                        .requestMatchers(
+                                                "/swagger-ui.html",
+                                                "/swagger-ui/**",
+                                                "/v3/api-docs/**",
+                                                "/v3/api-docs.yaml",
+                                                "/favicon.ico",
+                                                "/webjars/**",
+                                                "/swagger-resources/**"
+                                        ).permitAll()
 
-                        // Professionals management: only ADMIN can create/update/delete
-                        .requestMatchers(HttpMethod.POST, "/api/v1/professionals/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/v1/professionals/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/v1/professionals/**").hasRole("ADMIN")
+                                        // Allow read access to API resources for authenticated roles
+                                        .requestMatchers(HttpMethod.GET, "/api/v1/**").hasAnyRole("ADMIN", "PROFESSIONAL", "RECEPTIONIST")
 
-                        // Patients: created/updated by RECEPTIONIST or ADMIN
-                        .requestMatchers(HttpMethod.POST, "/api/v1/patients/**").hasAnyRole("ADMIN","RECEPTIONIST")
-                        .requestMatchers(HttpMethod.PUT, "/api/v1/patients/**").hasAnyRole("ADMIN","RECEPTIONIST")
-                        .requestMatchers(HttpMethod.DELETE, "/api/v1/patients/**").hasRole("ADMIN")
+                                        // Professionals management: only ADMIN can create/update/delete
+                                        .requestMatchers(HttpMethod.POST, "/api/v1/professionals/**").hasRole("ADMIN")
+                                        .requestMatchers(HttpMethod.PUT, "/api/v1/professionals/**").hasRole("ADMIN")
+                                        .requestMatchers(HttpMethod.DELETE, "/api/v1/professionals/**").hasRole("ADMIN")
 
-                        // Appointments: created/updated by RECEPTIONIST, PROFESSIONAL or ADMIN
-                        .requestMatchers(HttpMethod.POST, "/api/v1/appointments/**").hasAnyRole("ADMIN","RECEPTIONIST","PROFESSIONAL")
-                        .requestMatchers(HttpMethod.PUT, "/api/v1/appointments/**").hasAnyRole("ADMIN","RECEPTIONIST","PROFESSIONAL")
-                        .requestMatchers(HttpMethod.PATCH, "/api/v1/appointments/**").hasAnyRole("ADMIN","RECEPTIONIST","PROFESSIONAL")
-                        .requestMatchers(HttpMethod.DELETE, "/api/v1/appointments/**").hasAnyRole("ADMIN","RECEPTIONIST")
+                                        // Patients: created/updated by RECEPTIONIST or ADMIN
+                                        .requestMatchers(HttpMethod.POST, "/api/v1/patients/**").hasAnyRole("ADMIN","RECEPTIONIST")
+                                        .requestMatchers(HttpMethod.PUT, "/api/v1/patients/**").hasAnyRole("ADMIN","RECEPTIONIST")
+                                        .requestMatchers(HttpMethod.DELETE, "/api/v1/patients/**").hasRole("ADMIN")
 
-                        // Default: any other request requires ADMIN
-                        .anyRequest().hasRole("ADMIN")
-                )
+                                        // Appointments: created/updated by RECEPTIONIST, PROFESSIONAL or ADMIN
+                                        .requestMatchers(HttpMethod.POST, "/api/v1/appointments/**").hasAnyRole("ADMIN","RECEPTIONIST","PROFESSIONAL")
+                                        .requestMatchers(HttpMethod.PUT, "/api/v1/appointments/**").hasAnyRole("ADMIN","RECEPTIONIST","PROFESSIONAL")
+                                        .requestMatchers(HttpMethod.PATCH, "/api/v1/appointments/**").hasAnyRole("ADMIN","RECEPTIONIST","PROFESSIONAL")
+                                        .requestMatchers(HttpMethod.DELETE, "/api/v1/appointments/**").hasAnyRole("ADMIN","RECEPTIONIST")
+
+                                        // Default: any other request requires ADMIN
+                                        .anyRequest().hasRole("ADMIN")
+                                )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

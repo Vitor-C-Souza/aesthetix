@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@io.swagger.v3.oas.annotations.media.Schema(description = "Appointment request payload")
 public record AppointmentRequestDTO(
         @NotNull(message = "O ID do paciente é obrigatório")
         UUID patientId,

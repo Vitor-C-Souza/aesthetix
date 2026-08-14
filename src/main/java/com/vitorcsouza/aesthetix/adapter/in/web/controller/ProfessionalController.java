@@ -17,6 +17,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/professionals")
+@io.swagger.v3.oas.annotations.tags.Tag(name = "Professional")
 @RequiredArgsConstructor
 public class ProfessionalController {
 

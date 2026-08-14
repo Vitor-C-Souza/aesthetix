@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@io.swagger.v3.oas.annotations.media.Schema(description = "Patient response payload")
 public record PatientResponseDTO(
         UUID id,
         String name,

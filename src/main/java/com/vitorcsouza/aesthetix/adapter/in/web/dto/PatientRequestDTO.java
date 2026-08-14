@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Pattern;
 
 import java.time.LocalDate;
 
+@io.swagger.v3.oas.annotations.media.Schema(description = "Patient request payload")
 public record PatientRequestDTO(
         @NotBlank(message = "O nome é obrigatório")
         String name,

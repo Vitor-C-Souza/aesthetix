@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Pattern;
 
 import java.math.BigDecimal;
 
+@io.swagger.v3.oas.annotations.media.Schema(description = "Professional request payload")
 public record ProfessionalRequestDTO(
         @NotBlank(message = "O nome é obrigatório")
         String name,

@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.UUID;
 
+@io.swagger.v3.oas.annotations.media.Schema(description = "Evolution photo request payload")
 public record EvolutionPhotoRequestDTO(
         @NotNull(message = "O ID do paciente é obrigatório")
         UUID patientId,

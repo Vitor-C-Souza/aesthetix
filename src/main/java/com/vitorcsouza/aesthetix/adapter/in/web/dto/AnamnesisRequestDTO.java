@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.UUID;
 
+@io.swagger.v3.oas.annotations.media.Schema(description = "Anamnesis request payload")
 public record AnamnesisRequestDTO(
         @NotNull(message = "O ID do paciente é obrigatório")
         UUID patientId,

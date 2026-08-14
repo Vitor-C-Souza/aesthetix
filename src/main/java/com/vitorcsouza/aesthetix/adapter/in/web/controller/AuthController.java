@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/auth")
+@io.swagger.v3.oas.annotations.tags.Tag(name = "Auth")
 public class AuthController {
 
     private final AuthService authService;

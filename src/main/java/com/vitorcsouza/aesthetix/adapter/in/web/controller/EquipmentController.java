@@ -17,6 +17,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/equipments")
+@io.swagger.v3.oas.annotations.tags.Tag(name = "Equipment")
 @RequiredArgsConstructor
 public class EquipmentController {
     private final EquipmentInputPort equipmentInputPort;

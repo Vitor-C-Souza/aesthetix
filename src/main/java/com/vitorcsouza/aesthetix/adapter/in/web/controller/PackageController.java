@@ -17,6 +17,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/packages")
+@io.swagger.v3.oas.annotations.tags.Tag(name = "Package")
 @RequiredArgsConstructor
 public class PackageController {
 

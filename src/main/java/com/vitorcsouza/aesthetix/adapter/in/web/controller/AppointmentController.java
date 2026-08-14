@@ -20,6 +20,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/appointments")
+@io.swagger.v3.oas.annotations.tags.Tag(name = "Appointment")
 @RequiredArgsConstructor
 public class AppointmentController {
 

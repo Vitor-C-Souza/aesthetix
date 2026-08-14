@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 
+@io.swagger.v3.oas.annotations.media.Schema(description = "Procedure request payload")
 public record ProcedureRequestDTO(
         @NotBlank(message = "O nome do procedimento é obrigatório")
         String name,

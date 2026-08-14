@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@io.swagger.v3.oas.annotations.media.Schema(description = "Appointment response payload")
 public record AppointmentResponseDTO(
         UUID id,
         UUID patientId,

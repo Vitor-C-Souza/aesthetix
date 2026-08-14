@@ -17,6 +17,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/anamneses")
+@io.swagger.v3.oas.annotations.tags.Tag(name = "Anamnesis")
 @RequiredArgsConstructor
 public class AnamnesisController {
 

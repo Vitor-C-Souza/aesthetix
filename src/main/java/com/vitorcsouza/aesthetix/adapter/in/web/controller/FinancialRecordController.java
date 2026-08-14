@@ -19,6 +19,7 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/financial-records")
+@io.swagger.v3.oas.annotations.tags.Tag(name = "FinancialRecord")
 public class FinancialRecordController {
 
     private final FinancialRecordInputPort financialInputPort;

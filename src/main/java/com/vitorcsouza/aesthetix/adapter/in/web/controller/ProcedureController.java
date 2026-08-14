@@ -17,6 +17,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/procedures")
+@io.swagger.v3.oas.annotations.tags.Tag(name = "Procedure")
 @RequiredArgsConstructor
 public class ProcedureController {
     private final ProcedureInputPort procedureInputPort;

@@ -17,6 +17,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/evolution-photos")
+@io.swagger.v3.oas.annotations.tags.Tag(name = "EvolutionPhoto")
 @RequiredArgsConstructor
 public class EvolutionPhotoController {
 

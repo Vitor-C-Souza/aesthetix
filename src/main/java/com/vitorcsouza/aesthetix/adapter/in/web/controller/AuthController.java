@@ -17,13 +17,17 @@ public class AuthController {
         this.authService = authService;
     }
 
+    @io.swagger.v3.oas.annotations.Operation(summary = "Register user")
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Registered and returned JWT token")
     @PostMapping("/register")
-    public ResponseEntity<AuthResponseDTO> register(@RequestBody RegisterRequestDTO dto) {
+    public ResponseEntity<AuthResponseDTO> register(@io.swagger.v3.oas.annotations.parameters.RequestBody @RequestBody RegisterRequestDTO dto) {
         return ResponseEntity.ok(authService.register(dto));
     }
 
+    @io.swagger.v3.oas.annotations.Operation(summary = "Authenticate user")
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Authenticated and returned JWT token")
     @PostMapping("/login")
-    public ResponseEntity<AuthResponseDTO> login(@RequestBody AuthRequestDTO dto) {
+    public ResponseEntity<AuthResponseDTO> login(@io.swagger.v3.oas.annotations.parameters.RequestBody @RequestBody AuthRequestDTO dto) {
         return ResponseEntity.ok(authService.login(dto));
     }
 }

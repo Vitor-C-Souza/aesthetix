@@ -1,10 +1,10 @@
-package com.vitorcsouza.aesthetix.adapter.in.web.security;
+package com.vitorcsouza.aesthetix.adapter.out.security;
 
-import com.vitorcsouza.aesthetix.adapter.out.persistence.entity.UserEntity;
-import com.vitorcsouza.aesthetix.adapter.out.persistence.repository.SpringDataUserRepository;
 import com.vitorcsouza.aesthetix.adapter.in.web.dto.AuthRequestDTO;
 import com.vitorcsouza.aesthetix.adapter.in.web.dto.AuthResponseDTO;
 import com.vitorcsouza.aesthetix.adapter.in.web.dto.RegisterRequestDTO;
+import com.vitorcsouza.aesthetix.adapter.out.persistence.entity.UserEntity;
+import com.vitorcsouza.aesthetix.adapter.out.persistence.repository.SpringDataUserRepository;
 import com.vitorcsouza.aesthetix.domain.model.Role;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -52,7 +52,8 @@ public class AuthService {
 
     public AuthResponseDTO login(AuthRequestDTO dto) {
         Optional<UserEntity> opt = userRepository.findByUsername(dto.getUsername());
-        if (opt.isEmpty()) throw new com.vitorcsouza.aesthetix.domain.exception.BusinessException("Invalid credentials");
+        if (opt.isEmpty())
+            throw new com.vitorcsouza.aesthetix.domain.exception.BusinessException("Invalid credentials");
 
         UserEntity user = opt.get();
         if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {

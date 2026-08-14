@@ -1,4 +1,4 @@
-package com.vitorcsouza.aesthetix.adapter.in.web.config;
+package com.vitorcsouza.aesthetix.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;

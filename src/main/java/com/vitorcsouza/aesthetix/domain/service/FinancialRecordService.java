@@ -8,13 +8,11 @@ import com.vitorcsouza.aesthetix.domain.port.out.FinancialRecordOutputPort;
 import com.vitorcsouza.aesthetix.domain.port.out.PatientOutputPort;
 import com.vitorcsouza.aesthetix.domain.port.out.ProfessionalOutputPort;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-@Service
 @RequiredArgsConstructor
 public class FinancialRecordService implements FinancialRecordInputPort {
 

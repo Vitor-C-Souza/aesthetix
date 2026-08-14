@@ -1,4 +1,4 @@
-package com.vitorcsouza.aesthetix.adapter.in.web.security;
+package com.vitorcsouza.aesthetix.adapter.out.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vitorcsouza.aesthetix.adapter.in.web.exception.StandardError;

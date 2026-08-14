@@ -5,12 +5,10 @@ import com.vitorcsouza.aesthetix.domain.model.Professional;
 import com.vitorcsouza.aesthetix.domain.port.in.ProfessionalInputPort;
 import com.vitorcsouza.aesthetix.domain.port.out.ProfessionalOutputPort;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
 
-@Service
 @RequiredArgsConstructor
 public class ProfessionalService implements ProfessionalInputPort {
 

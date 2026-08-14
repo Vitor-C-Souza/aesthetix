@@ -1,4 +1,4 @@
-package com.vitorcsouza.aesthetix.adapter.in.web.config;
+package com.vitorcsouza.aesthetix.config;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;

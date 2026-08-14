@@ -5,12 +5,10 @@ import com.vitorcsouza.aesthetix.domain.model.Procedure;
 import com.vitorcsouza.aesthetix.domain.port.in.ProcedureInputPort;
 import com.vitorcsouza.aesthetix.domain.port.out.ProcedureOutputPort;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
 
-@Service
 @RequiredArgsConstructor
 public class ProcedureService implements ProcedureInputPort {
 

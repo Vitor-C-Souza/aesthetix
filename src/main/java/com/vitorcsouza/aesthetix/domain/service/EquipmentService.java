@@ -5,12 +5,10 @@ import com.vitorcsouza.aesthetix.domain.model.Equipment;
 import com.vitorcsouza.aesthetix.domain.port.in.EquipmentInputPort;
 import com.vitorcsouza.aesthetix.domain.port.out.EquipmentOutputPort;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
 
-@Service
 @RequiredArgsConstructor
 public class EquipmentService implements EquipmentInputPort {
 

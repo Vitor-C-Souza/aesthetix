@@ -3,9 +3,12 @@ package com.vitorcsouza.aesthetix.adapter.in.web.controller;
 import com.vitorcsouza.aesthetix.adapter.in.web.dto.AuthRequestDTO;
 import com.vitorcsouza.aesthetix.adapter.in.web.dto.AuthResponseDTO;
 import com.vitorcsouza.aesthetix.adapter.in.web.dto.RegisterRequestDTO;
-import com.vitorcsouza.aesthetix.adapter.in.web.security.AuthService;
+import com.vitorcsouza.aesthetix.adapter.out.security.AuthService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/auth")

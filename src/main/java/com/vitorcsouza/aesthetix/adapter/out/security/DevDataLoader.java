@@ -1,4 +1,4 @@
-package com.vitorcsouza.aesthetix.adapter.in.web.security;
+package com.vitorcsouza.aesthetix.adapter.out.security;
 
 import com.vitorcsouza.aesthetix.adapter.out.persistence.entity.UserEntity;
 import com.vitorcsouza.aesthetix.adapter.out.persistence.repository.SpringDataUserRepository;

@@ -1,17 +1,15 @@
 package com.vitorcsouza.aesthetix.domain.service;
 
+import com.vitorcsouza.aesthetix.domain.DomainPage;
+import com.vitorcsouza.aesthetix.domain.DomainPageRequest;
 import com.vitorcsouza.aesthetix.domain.exception.ResourceNotFoundException;
 import com.vitorcsouza.aesthetix.domain.model.Patient;
 import com.vitorcsouza.aesthetix.domain.port.in.PatientInputPort;
 import com.vitorcsouza.aesthetix.domain.port.out.PatientOutputPort;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
-@Service
 @RequiredArgsConstructor
 public class PatientService implements PatientInputPort {
 
@@ -45,8 +43,8 @@ public class PatientService implements PatientInputPort {
     }
 
     @Override
-    public Page<Patient> findByName(String name, Pageable pageable) {
-        return patientOutputPort.findByNameContainingIgnoreCase(name, pageable);
+    public DomainPage<Patient> findByName(String name, DomainPageRequest pageRequest) {
+        return patientOutputPort.findByNameContainingIgnoreCase(name, pageRequest);
     }
 
     @Override

@@ -3,6 +3,8 @@ package com.vitorcsouza.aesthetix.adapter.out.persistence;
 import com.vitorcsouza.aesthetix.adapter.out.persistence.entity.PatientEntity;
 import com.vitorcsouza.aesthetix.adapter.out.persistence.mapper.PatientMapper;
 import com.vitorcsouza.aesthetix.adapter.out.persistence.repository.SpringDataPatientRepository;
+import com.vitorcsouza.aesthetix.domain.DomainPage;
+import com.vitorcsouza.aesthetix.domain.DomainPageRequest;
 import com.vitorcsouza.aesthetix.domain.model.Patient;
 import com.vitorcsouza.aesthetix.domain.port.out.PatientOutputPort;
 import lombok.RequiredArgsConstructor;
@@ -43,8 +45,10 @@ public class PatientPersistenceAdapter implements PatientOutputPort {
     }
 
     @Override
-    public Page<Patient> findByNameContainingIgnoreCase(String name, Pageable pageable) {
-        return repository.findByNameContainingIgnoreCase(name, pageable).map(mapper::toDomain);
+    public DomainPage<Patient> findByNameContainingIgnoreCase(String name, DomainPageRequest pageRequest) {
+        Pageable pageable = org.springframework.data.domain.PageRequest.of(pageRequest.getPage(), pageRequest.getSize());
+        Page<Patient> page = repository.findByNameContainingIgnoreCase(name, pageable).map(mapper::toDomain);
+        return new DomainPage<>(page.getContent(), page.getTotalElements(), page.getTotalPages(), page.getNumber(), page.getSize());
     }
 
     @Override

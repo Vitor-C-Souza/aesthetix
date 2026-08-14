@@ -10,12 +10,10 @@ import com.vitorcsouza.aesthetix.domain.port.out.PackageOutputPort;
 import com.vitorcsouza.aesthetix.domain.port.out.PatientOutputPort;
 import com.vitorcsouza.aesthetix.domain.port.out.ProcedureOutputPort;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
 
-@Service
 @RequiredArgsConstructor
 public class PackageService implements PackageInputPort {
 

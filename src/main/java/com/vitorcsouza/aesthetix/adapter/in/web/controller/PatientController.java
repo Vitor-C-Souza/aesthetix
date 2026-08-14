@@ -3,11 +3,14 @@ package com.vitorcsouza.aesthetix.adapter.in.web.controller;
 import com.vitorcsouza.aesthetix.adapter.in.web.dto.PatientRequestDTO;
 import com.vitorcsouza.aesthetix.adapter.in.web.dto.PatientResponseDTO;
 import com.vitorcsouza.aesthetix.adapter.in.web.dto.PatientWebMapper;
+import com.vitorcsouza.aesthetix.domain.DomainPage;
+import com.vitorcsouza.aesthetix.domain.DomainPageRequest;
 import com.vitorcsouza.aesthetix.domain.model.Patient;
 import com.vitorcsouza.aesthetix.domain.port.in.PatientInputPort;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -53,40 +56,42 @@ public class PatientController {
     }
 
     @io.swagger.v3.oas.annotations.Operation(summary = "Search patients by name (paged)")
-        @io.swagger.v3.oas.annotations.responses.ApiResponses({
-                @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK"),
-                @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "Unauthorized")
-        })
-        @GetMapping
-        public ResponseEntity<Page<PatientResponseDTO>> findByName(
-                @RequestParam(defaultValue = "") String name,
-                Pageable pageable) {
-        Page<Patient> patients = patientInputPort.findByName(name, pageable);
-        return ResponseEntity.ok(patients.map(webMapper::toResponse));
+    @io.swagger.v3.oas.annotations.responses.ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "Unauthorized")
+    })
+    @GetMapping
+    public ResponseEntity<Page<PatientResponseDTO>> findByName(
+            @RequestParam(defaultValue = "") String name,
+            Pageable pageable) {
+        DomainPageRequest pageRequest = new DomainPageRequest(pageable.getPageNumber(), pageable.getPageSize());
+        DomainPage<Patient> patients = patientInputPort.findByName(name, pageRequest);
+        Page<PatientResponseDTO> dtoPage = new PageImpl<>(patients.getContent().stream().map(webMapper::toResponse).toList(), pageable, patients.getTotalElements());
+        return ResponseEntity.ok(dtoPage);
     }
 
     @io.swagger.v3.oas.annotations.Operation(summary = "Update patient")
-        @io.swagger.v3.oas.annotations.responses.ApiResponses({
-                @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK"),
-                @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Invalid request"),
-                @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "Unauthorized")
-        })
-        @PutMapping("/{id}")
-        public ResponseEntity<PatientResponseDTO> update(
-                @PathVariable UUID id,
-                @RequestBody @Valid PatientRequestDTO requestDTO) {
+    @io.swagger.v3.oas.annotations.responses.ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Invalid request"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "Unauthorized")
+    })
+    @PutMapping("/{id}")
+    public ResponseEntity<PatientResponseDTO> update(
+            @PathVariable UUID id,
+            @RequestBody @Valid PatientRequestDTO requestDTO) {
         Patient patient = webMapper.toDomain(requestDTO);
         Patient updated = patientInputPort.update(id, patient);
         return ResponseEntity.ok(webMapper.toResponse(updated));
     }
 
     @io.swagger.v3.oas.annotations.Operation(summary = "Delete patient")
-        @io.swagger.v3.oas.annotations.responses.ApiResponses({
-                @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "204", description = "No Content"),
-                @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "Unauthorized")
-        })
-        @DeleteMapping("/{id}")
-        public ResponseEntity<Void> delete(@PathVariable UUID id) {
+    @io.swagger.v3.oas.annotations.responses.ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "204", description = "No Content"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "Unauthorized")
+    })
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable UUID id) {
         patientInputPort.delete(id);
         return ResponseEntity.noContent().build();
     }

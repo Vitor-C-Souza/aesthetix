@@ -1,6 +1,5 @@
 package com.vitorcsouza.aesthetix.adapter.out.persistence;
 
-import com.vitorcsouza.aesthetix.adapter.out.persistence.entity.FinancialRecordEntity;
 import com.vitorcsouza.aesthetix.adapter.out.persistence.mapper.FinancialRecordMapper;
 import com.vitorcsouza.aesthetix.adapter.out.persistence.repository.SpringDataFinancialRecordRepository;
 import com.vitorcsouza.aesthetix.domain.model.FinancialRecord;
@@ -9,8 +8,6 @@ import com.vitorcsouza.aesthetix.domain.port.out.FinancialRecordOutputPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -23,8 +20,9 @@ public class FinancialRecordPersistenceAdapter implements FinancialRecordOutputP
 
     @Override
     public FinancialRecord save(FinancialRecord financialRecord) {
-        FinancialRecordEntity entity = mapper.toEntity(financialRecord);
-        return mapper.toDomain(repository.save(entity));
+        var entity = mapper.toEntity(financialRecord);
+        var savedEntity = repository.save(entity);
+        return mapper.toDomain(savedEntity);
     }
 
     @Override
@@ -33,27 +31,21 @@ public class FinancialRecordPersistenceAdapter implements FinancialRecordOutputP
     }
 
     @Override
-    public List<FinancialRecord> findByPatientIdOrderByCreatedAtDesc(UUID patientId) {
-        return repository.findByPatientIdOrderByCreatedAtDesc(patientId).stream()
+    public List<FinancialRecord> findByPatientId(UUID patientId) {
+        return repository.findByPatientId(patientId)
+                .stream()
                 .map(mapper::toDomain)
                 .toList();
     }
 
     @Override
-    public List<FinancialRecord> findByProfessionalIdAndStatusAndPaidAtBetween(
-            UUID professionalId, PaymentStatus status, LocalDateTime start, LocalDateTime end
-    ) {
-        return repository.findByProfessionalIdAndStatusAndPaidAtBetween(professionalId, status, start, end).stream()
+    public List<FinancialRecord> findByStatus(PaymentStatus status) {
+        return repository.findByStatus(status)
+                .stream()
                 .map(mapper::toDomain)
                 .toList();
     }
 
-    @Override
-    public BigDecimal sumCommissionsByProfessionalAndPeriod(
-            UUID professionalId, LocalDateTime start, LocalDateTime end
-    ) {
-        return repository.sumCommissionsByProfessionalAndPeriod(professionalId, start, end);
-    }
 
     @Override
     public void deleteById(UUID id) {

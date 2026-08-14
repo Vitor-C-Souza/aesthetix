@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@io.swagger.v3.oas.annotations.media.Schema(description = "Package response payload")
+@io.swagger.v3.oas.annotations.media.Schema(description = "Package response payload", example = "{\"id\":\"00000000-0000-0000-0000-000000000000\",\"patientId\":\"00000000-0000-0000-0000-000000000000\",\"sessionsLeft\":9}")
 public record PackageResponseDTO(
         UUID id,
         UUID patientId,

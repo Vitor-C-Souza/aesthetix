@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-@io.swagger.v3.oas.annotations.media.Schema(description = "Package request payload")
+@io.swagger.v3.oas.annotations.media.Schema(description = "Package request payload", example = "{\"patientId\":\"00000000-0000-0000-0000-000000000000\",\"sessions\":10,\"price\":499.0}")
 public record PackageRequestDTO(
         @NotNull(message = "O ID do paciente é obrigatório")
         UUID patientId,

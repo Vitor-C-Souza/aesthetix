@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@io.swagger.v3.oas.annotations.media.Schema(description = "Appointment response payload")
+@io.swagger.v3.oas.annotations.media.Schema(description = "Appointment response payload", example = "{\"id\":\"00000000-0000-0000-0000-000000000000\",\"patientId\":\"00000000-0000-0000-0000-000000000000\",\"professionalId\":\"00000000-0000-0000-0000-000000000000\",\"start\":\"2026-08-20T10:00:00\",\"end\":\"2026-08-20T11:00:00\",\"status\":\"SCHEDULED\"}")
 public record AppointmentResponseDTO(
         UUID id,
         UUID patientId,

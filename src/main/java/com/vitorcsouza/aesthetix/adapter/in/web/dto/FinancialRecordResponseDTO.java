@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@io.swagger.v3.oas.annotations.media.Schema(description = "Financial record response payload")
+@io.swagger.v3.oas.annotations.media.Schema(description = "Financial record response payload", example = "{\"id\":\"00000000-0000-0000-0000-000000000000\",\"patientId\":\"00000000-0000-0000-0000-000000000000\",\"amount\":99.90,\"status\":\"PAID\"}")
 public record FinancialRecordResponseDTO(
         UUID id,
         UUID patientId,

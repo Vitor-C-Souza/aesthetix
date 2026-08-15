@@ -56,4 +56,13 @@ public class DomainBeanConfig {
     public FinancialRecordInputPort financialRecordInputPort(FinancialRecordOutputPort financialOutputPort, PatientOutputPort patientOutputPort, AppointmentOutputPort appointmentOutputPort, ProfessionalOutputPort professionalOutputPort) {
         return new FinancialRecordService(financialOutputPort, patientOutputPort, appointmentOutputPort, professionalOutputPort);
     }
+
+    @Bean
+    public AuthInputPort authInputPort(
+            UserOutputPort userOutputPort,
+            PasswordEncoderPort passwordEncoder,
+            TokenOutputPort tokenOutputPort
+    ) {
+        return new AuthService(userOutputPort, passwordEncoder, tokenOutputPort);
+    }
 }

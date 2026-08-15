@@ -8,11 +8,10 @@ import com.vitorcsouza.aesthetix.domain.port.out.PasswordEncoderPort;
 import com.vitorcsouza.aesthetix.domain.port.out.TokenOutputPort;
 import com.vitorcsouza.aesthetix.domain.port.out.UserOutputPort;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 import java.util.Set;
 
-@Service
+
 @RequiredArgsConstructor
 public class AuthService implements AuthInputPort {
 

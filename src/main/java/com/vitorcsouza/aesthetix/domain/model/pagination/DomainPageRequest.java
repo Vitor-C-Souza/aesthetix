@@ -1,4 +1,4 @@
-package com.vitorcsouza.aesthetix.domain;
+package com.vitorcsouza.aesthetix.domain.model.pagination;
 
 public class DomainPageRequest {
     private final int page;

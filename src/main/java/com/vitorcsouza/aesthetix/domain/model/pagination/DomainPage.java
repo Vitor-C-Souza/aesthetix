@@ -1,4 +1,4 @@
-package com.vitorcsouza.aesthetix.domain;
+package com.vitorcsouza.aesthetix.domain.model.pagination;
 
 import java.util.List;
 

@@ -3,7 +3,9 @@ package com.vitorcsouza.aesthetix.adapter.in.web.controller;
 import com.vitorcsouza.aesthetix.adapter.in.web.dto.AuthRequestDTO;
 import com.vitorcsouza.aesthetix.adapter.in.web.dto.AuthResponseDTO;
 import com.vitorcsouza.aesthetix.adapter.in.web.dto.RegisterRequestDTO;
-import com.vitorcsouza.aesthetix.adapter.out.security.AuthService;
+import com.vitorcsouza.aesthetix.domain.model.AuthResult;
+import com.vitorcsouza.aesthetix.domain.port.in.AuthInputPort;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,14 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/auth")
+@RequiredArgsConstructor
 @io.swagger.v3.oas.annotations.tags.Tag(name = "Auth")
 public class AuthController {
 
-    private final AuthService authService;
+    private final AuthInputPort authInputPort;
 
-    public AuthController(AuthService authService) {
-        this.authService = authService;
-    }
 
     @io.swagger.v3.oas.annotations.Operation(summary = "Register user")
     @io.swagger.v3.oas.annotations.responses.ApiResponses({
@@ -29,7 +29,16 @@ public class AuthController {
     })
     @PostMapping("/register")
     public ResponseEntity<AuthResponseDTO> register(@io.swagger.v3.oas.annotations.parameters.RequestBody @RequestBody RegisterRequestDTO dto) {
-        return ResponseEntity.ok(authService.register(dto));
+
+        AuthResult result = authInputPort.register(
+                dto.getUsername(),
+                dto.getPassword(),
+                dto.getRole()
+        );
+
+        return ResponseEntity.ok(
+                new AuthResponseDTO(result.token())
+        );
     }
 
     @io.swagger.v3.oas.annotations.Operation(summary = "Authenticate user")
@@ -39,7 +48,16 @@ public class AuthController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "Unauthorized")
     })
     @PostMapping("/login")
-    public ResponseEntity<AuthResponseDTO> login(@io.swagger.v3.oas.annotations.parameters.RequestBody @RequestBody AuthRequestDTO dto) {
-        return ResponseEntity.ok(authService.login(dto));
+    public ResponseEntity<AuthResponseDTO> login(
+            @RequestBody AuthRequestDTO dto
+    ) {
+        AuthResult result = authInputPort.login(
+                dto.getUsername(),
+                dto.getPassword()
+        );
+
+        return ResponseEntity.ok(
+                new AuthResponseDTO(result.token())
+        );
     }
 }

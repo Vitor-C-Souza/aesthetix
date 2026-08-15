@@ -1,9 +1,9 @@
 package com.vitorcsouza.aesthetix.domain.service;
 
-import com.vitorcsouza.aesthetix.domain.DomainPage;
-import com.vitorcsouza.aesthetix.domain.DomainPageRequest;
 import com.vitorcsouza.aesthetix.domain.exception.ResourceNotFoundException;
 import com.vitorcsouza.aesthetix.domain.model.Patient;
+import com.vitorcsouza.aesthetix.domain.model.pagination.DomainPage;
+import com.vitorcsouza.aesthetix.domain.model.pagination.DomainPageRequest;
 import com.vitorcsouza.aesthetix.domain.port.in.PatientInputPort;
 import com.vitorcsouza.aesthetix.domain.port.out.PatientOutputPort;
 import lombok.RequiredArgsConstructor;

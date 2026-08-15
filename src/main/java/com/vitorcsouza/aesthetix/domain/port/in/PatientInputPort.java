@@ -1,8 +1,8 @@
 package com.vitorcsouza.aesthetix.domain.port.in;
 
-import com.vitorcsouza.aesthetix.domain.DomainPage;
-import com.vitorcsouza.aesthetix.domain.DomainPageRequest;
 import com.vitorcsouza.aesthetix.domain.model.Patient;
+import com.vitorcsouza.aesthetix.domain.model.pagination.DomainPage;
+import com.vitorcsouza.aesthetix.domain.model.pagination.DomainPageRequest;
 
 import java.util.UUID;
 

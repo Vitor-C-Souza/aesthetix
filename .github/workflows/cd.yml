@@ -1,0 +1,32 @@
+name: Aesthetix CD (Deploy)
+
+on:
+  workflow_run:
+    workflows: [ "Aesthetix CI (Build & Test)" ]
+    types:
+      - completed
+    branches: [ "main", "master" ]
+
+jobs:
+  deploy:
+    name: Deploy no Azure App Service
+    runs-on: ubuntu-latest
+    # Garante que só roda se o CI terminou com SUCESSO
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    steps:
+      # Baixa o .jar gerado pelo workflow de CI
+      - name: Baixar Artefato (.jar)
+        uses: actions/download-artifact@v4
+        with:
+          name: app-jar
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          run-id: ${{ github.event.workflow_run.id }}
+
+      # Envia o .jar para o Azure App Service
+      - name: Deploy no Azure App Service
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: 'app-aesthetix-api'
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: '*.jar'

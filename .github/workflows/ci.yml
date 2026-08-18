@@ -1,4 +1,4 @@
-name: Aesthetix CI Pipeline
+name: Aesthetix CI/CD Pipeline
 
 on:
   push:
@@ -11,8 +11,8 @@ permissions:
   checks: write
 
 jobs:
-  build:
-    name: Build and Test
+  build-and-deploy:
+    name: Build, Test and Deploy
     runs-on: ubuntu-latest
 
     steps:
@@ -32,14 +32,23 @@ jobs:
       - name: Compilar e executar testes
         run: |
           if [ -f "./mvnw" ]; then
-            ./mvnw clean verify -B --no-transfer-progress
+            ./mvnw clean package -B --no-transfer-progress
           else
-            mvn clean verify -B --no-transfer-progress
+            mvn clean package -B --no-transfer-progress
           fi
 
       - name: Publicar relatório de testes (JUnit)
         uses: mikepenz/action-junit-report@v4
-        if: always() # Executa mesmo se houver falha nos testes
+        if: always()
         with:
           report_paths: '**/target/surefire-reports/TEST-*.xml'
           require_tests: false
+
+      # Executa o deploy no Azure apenas se for PUSH em main ou master (não roda em Pull Requests)
+      - name: Deploy no Azure App Service
+        if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: 'app-aesthetix-api'
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: 'target/*.jar'
